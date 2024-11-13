@@ -1,0 +1,190 @@
+{% extends "/base.html" %}
+
+{% block title %}
+<title>Chi tiết đơn hàng</title>
+{% endblock %}
+
+{% block toolbar %}
+{% include "/toolbar.html" %}
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <p class="display-5 order-info-title">Giỏ hàng</p>
+    <div class="d-flex" id="cart">
+        <div style="margin-right: 3rem;">
+            <br>
+            <table id="order-item-table" class="table table-striped table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col" name="id">Id</th>
+                        <th scope="col">Tên</th>
+                        <th scope="col" name="amount">Số lượng</th>
+                        <th scope="col">Giá</th>
+                        <th scope="col" data-orderable="false">Tùy chọn</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in cartLst: %}
+                    <tr id="{{'item_'+item.product.id|string}}">
+                        <td scope="col" name="id">{{item.product.id}}</td>
+                        <td style="text-align: left;">{{item.product.name}}</td>
+                        <td>
+                            <input class="form-control"
+                                onchange="calPrice(this,`{{'total_'+item.product.id|string}}`,`{{item.product.price}}`)"
+                                type="number" name="amount" min="1" style="text-align: right" value="{{item.quantity}}">
+                        </td>
+                        <td>
+                            <span style="margin: auto;" id="{{'total_'+item.product.id|string}}">
+                                {{item.product.price|int *item.quantity}}
+                            </span>
+                        </td>
+                        <td>
+                            <button class="btn btn-outline-danger"
+                                onclick="removeCartItem(`{{'item_'+item.product.id|string}}`)">Xóa</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <div id="order-info">
+                <p class="order-info-title fw-bold">Thông tin nhận hàng</p>
+                <div>
+                    <div class="order-info_input">
+                        <label for="address" class="form-label">Địa chỉ:</label>
+                        <input type="text" class="form-control" id="address" value="123... - Hà Đông - Hà Nội">
+                    </div>
+                    <div class="order-info_input">
+                        <label for="name" class="form-label">Người nhận:</label>
+                        <input type="text" class="form-control" id="name" value="Nguyen Van A">
+                    </div>
+                    <div class="order-info_input">
+                        <label for="phone" class="form-label">Số điện thoại:</label>
+                        <input type="text" class="form-control" id="phone" value="0123456789">
+                    </div>
+                    <div class="order-info_input">
+                        <label for="email" class="form-label">Email:</label>
+                        <input type="email" class="form-control" id="email" value="truongvh001@gmail.com">
+                    </div>
+                </div>
+            </div>
+            <div>
+                <button id="order-btn" class="btn btn-success" onclick="takeOrder()">Đặt hàng</button>
+                <button id="loading-btn" class="btn btn-success" disabled hidden>
+                    <span class="spinner-border spinner-border-sm"></span>
+                    Đang đặt...
+                </button>
+                <button class="btn btn-danger" onclick="location.reload()">Hủy</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    $('#import-item-list').DataTable({
+        // searching: false,
+        // info: false,
+        pageLength: 6,
+        lengthChange: false,
+        pagingType: 'full_numbers',
+        language: {
+            "zeroRecords": "Không có dữ liệu",
+            "lengthMenu": "Display _MENU_ records per page",
+            "info": "Hiển thị trang thứ _PAGE_ trong _PAGES_ trang",
+            "infoEmpty": "Trống",
+            "infoFiltered": "Trống",
+            "search": "Tìm kiếm dữ liệu trong bảng dưới",
+            paginate: {
+                first: '<<',
+                last: '>>',
+                next: '>',
+                previous: '<'
+            }
+        },
+    });
+    const orderItemTable = $('#order-item-table').DataTable({
+        searching: false,
+        info: false,
+        pageLength: 5,
+        lengthChange: false,
+        pagingType: 'simple_numbers',
+        language: {
+            "zeroRecords": " ",
+            "lengthMenu": "Display _MENU_ records per page",
+            "info": "Hiển thị trang thứ _PAGE_ trong _PAGES_ trang",
+            "infoEmpty": "Trống",
+            "infoFiltered": "Trống",
+            "search": "Tìm kiếm dữ liệu trong bảng dưới",
+            paginate: {
+                first: '<<',
+                last: '>>',
+                next: '>',
+                previous: '<'
+            }
+        },
+    });
+    function removeCartItem(id) {
+        orderItemTable.rows("#" + id).remove().draw();
+    }
+    function takeOrder() {
+        if ($('#order-item-table').DataTable().rows().count() == 0) {
+            alert("Không thể đặt do không có sản phẩm");
+            return;
+        }
+        const cart = {}
+        var array = [];
+        var totalPrice = 0;
+        var totalProduct = 0;
+        var headers = ['productId', 'quantity', 'totalPrice'];
+        $('#order-item-table tr').has('td').each(function () {
+            var arrayItem = {};
+            $('td', $(this)).each(function (index, item) {
+                switch (index) {
+                    case 0:
+                        arrayItem[headers[0]] = parseInt($(item).html());
+                        break;
+                    case 2:
+                        var n = parseInt($(item).children('input').val());
+                        arrayItem[headers[1]] = n;
+                        totalProduct += n;
+                        break;
+                    case 3:
+                        var n = parseInt($(item).children('span').html());
+                        arrayItem[headers[2]] = n;
+                        totalPrice += n;
+                        break;
+                    default:
+                        break;
+                }
+            });
+            array.push(arrayItem);
+        });
+        if (totalProduct == 0) {
+            alert("Không thể đặt do không có sản phẩm");
+            return;
+        }
+        cart.totalPrice = totalPrice;
+        cart.totalProduct = totalProduct;
+        cart.items = array;
+        cart.address = document.getElementById('address').value;
+        cart.name = document.getElementById('name').value;
+        cart.phone = document.getElementById('phone').value;
+        cart.email = document.getElementById('email').value;
+        var modalTitle = "Bạn có chắc chắn muốn đặt hàng?";
+        var modalBody = "Thông tin đơn hàng:<div class='fw-bold'>Tổng giá tiền: " + numberWithSpaces(totalPrice) + " VND</div><div class='fw-bold'>Tổng sản phẩm: " + totalProduct + "</div>";
+        var modalAction = function () {
+            document.getElementById("loading-btn").hidden = false;
+            document.getElementById("order-btn").hidden = true;
+            sendDataAndRedirect("/take-order", JSON.stringify(cart))
+        };
+        showModal(modalTitle, modalBody, modalAction);
+    }
+    function calPrice(inp, id, price) {
+        document.getElementById(id).innerHTML = price * inp.value;
+    }
+</script>
+{% endblock %}

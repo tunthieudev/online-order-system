@@ -1,0 +1,9 @@
+.register-form>*{
+    margin: 0;
+}
+.register-form-text,.register-form-image{
+    width: 100%;
+}
+.register-form-text>*{
+    margin: 1rem 0;
+}

@@ -1,0 +1,17 @@
+{% extends "/base.html" %}
+
+{% block title %}
+<title>Lỗi: 404</title>
+{% endblock %}
+
+{% block toolbar %}
+{{super()}}
+{% endblock %}
+
+{% block body %}
+<div class="container" style="text-align: center;margin-top: 3rem;">
+    <p class="display-1" style="color: red;">Lỗi 404:</p>
+    <p class="display-5">Không tìm thấy trang yêu cầu</p>
+    <a href="/" class="btn btn-primary">Trở về trang chủ</a>
+</div>  
+{% endblock %}

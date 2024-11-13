@@ -1,0 +1,33 @@
+
+.login-container {
+    padding-top: 15vh;
+}
+
+.login-form {
+    text-align: center;
+    border-style: solid;
+    max-width: 750px;
+    margin: auto;
+}
+
+.login-form>* {
+    margin: 1rem 0;
+    padding: 0 1rem;
+}
+
+.input-text {
+    text-align: left;
+    text-wrap: nowrap;
+    margin-left: 2rem;
+    margin-right: 2rem;
+}
+
+.input-text label {
+    font-size: 120%;
+}
+
+.login-form-options {
+    margin: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+}

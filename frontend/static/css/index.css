@@ -1,0 +1,252 @@
+/*      */
+/* init */
+/*      */
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#notification {
+    position: fixed;
+    top: 5rem;
+    padding: 0.5rem;
+    background-color: cadetblue;
+}
+
+body {
+    padding-top: 4rem;
+    padding-bottom: 1rem;
+}
+
+a {
+    color: inherit !important;
+    text-decoration: none !important;
+
+}
+
+ul {
+    list-style-type: none;
+
+}
+
+th {
+    text-align: center !important;
+}
+
+label {
+    text-wrap: nowrap;
+    margin: auto;
+}
+
+select {
+    min-width: 150px;
+}
+
+thead {
+    background-color: rgb(180, 180, 180);
+}
+
+.table-hover tbody tr:hover td,
+.table-hover tbody tr:hover th {
+    background-color: rgb(230, 247, 255);
+}
+
+.warning-text {
+    color: red;
+}
+
+
+/*          */
+/*  search  */
+/*          */
+
+.home-btn-group {
+    padding-top: 175px;
+}
+
+.home-btn-group * {
+    text-align: center;
+    width: 20rem;
+    margin: 0 auto 0.5rem auto;
+    font-size: 1.2rem !important;
+}
+
+.home-btn {
+    background-color: rgb(96, 213, 213) !important;
+}
+
+/*     */
+/* nav */
+/*     */
+#acc-btn-group {
+    margin: auto 0;
+    color: white;
+}
+
+.container {
+    width: 100% !important;
+}
+
+.nav {
+    background-color: rgb(98, 208, 255);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    padding: 0rem 2rem !important;
+    z-index: 1000;
+    justify-content: space-around;
+    transition: top 0.3s;
+
+}
+
+.nav-icon {
+    font-size: 1.25rem;
+    padding: 0 0.5rem;
+}
+
+.nav-home-icon {
+    font-size: 2.5rem;
+}
+
+.nav-list {
+    display: flex;
+    text-align: center;
+}
+
+.nav-logout {
+    display: flex;
+    text-align: center;
+    margin: auto 0;
+}
+
+.nav-list>* {
+    margin-right: 1.5rem;
+    padding: auto;
+}
+
+.nav-item {
+    align-self: center;
+}
+
+.nav-title {
+    font-weight: bold;
+    font-size: 1.4rem;
+    padding: auto;
+    margin: auto;
+}
+
+.nav-button {
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+}
+
+.nav-button:hover {
+    background-color: rgb(100, 150, 255);
+    animation-name: nav-button-hover;
+    animation-duration: 1.5s;
+}
+
+.nav-tool>* {
+    margin: 0 0.75rem;
+}
+
+
+.col-sm-12.col-md-6 {
+    width: auto !important;
+    padding-left: 0;
+}
+
+.required-field::after {
+    content: " *";
+    color: red;
+}
+
+/*                  */
+/*  supplier-order  */
+/*                  */
+
+.add-order {
+    display: flex;
+    padding: 0.75rem 1rem;
+    background-color: aqua;
+}
+.return-btn{
+    position: absolute;
+}
+.add-order-title {
+    font-size: 1.25rem;
+    text-align: center;
+    margin: 0.5rem 2rem 0.5rem 0;
+}
+
+.order-info-title {
+    text-align: center;
+    font-size: 1.25rem;
+}
+#order-info{
+    border-style:dashed;
+    border-color: rgb(96, 96, 96);
+    padding: 4rem 2rem;
+    margin: 2rem 0;
+}
+#cart{
+    border-radius: 20px;
+    border-style:solid;
+    padding: 2rem;
+}
+.order-info_input{
+    margin: 0.5rem 0;
+    display: flex;
+}
+.order-info_input>label{
+    width: 10rem;
+}
+
+.import-item-table {
+    margin-right: 1rem;
+    padding: 1rem;
+    background-color: rgb(231, 231, 231);
+}
+
+/*             */
+/*  reponsive  */
+/*             */
+
+@keyframes nav-button-hover {
+    from {
+        background-color: rgb(98, 208, 255);
+    }
+
+    to {
+        background-color: rgb(100, 150, 255);
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    .nav-item>span {
+        display: none;
+    }
+
+    .search-tool {
+        display: block;
+    }
+
+    .search-bar {
+        margin: 0.5rem 0;
+    }
+}
+
+@media screen and (max-width:1200px) {
+    .container {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        width: 100% !important;
+        max-width: 100vw !important;
+    }
+
+    .nav-title {
+        display: none;
+    }
+}

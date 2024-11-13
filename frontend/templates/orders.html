@@ -1,0 +1,137 @@
+{% extends "/base.html" %}
+
+{% block title %}
+<title>Quản lý nhập hàng</title>
+{% endblock %}
+
+{% block toolbar %}
+{% include "/admin/admin_toolbar.html" %}
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="d-flex" style="justify-content: space-between;">
+        <div class="add-order">
+            <div style="width: 200px;">
+                <label for="add-supplier-order">Chọn nhà cung cấp&nbsp;</label>
+                <select id="add-supplier-order" class="form-select" aria-label="Chọn nhà cung cấp">
+                    <option selected value="0">...</option>
+                    {% for i in supLst: %}
+                    <option value="{{i.id}}">{{i.name}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <br>
+                <button class="btn btn-warning" onclick="addOrder()" style="margin: auto 0;">Thêm phiếu nhập</button>
+            </div>
+        </div>
+        <div class="display-6" style="text-align: center; margin: auto;">
+            Phiếu nhập hàng
+        </div>
+        <div style="margin: auto;"></div>
+        <!-- <button class="btn btn-secondary" style="margin: auto 0;">Xem các đơn hàng đang đặt</button> -->
+    </div>
+    <div style="padding: 1rem; background-color: rgb(231, 231, 231); margin-top: 5px;">
+        <table id="order-list" class="table table-striped table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">Stt</th>
+                    <th scope="col">Mã</th>
+                    <th scope="col">Ngày tạo</th>
+                    <th scope="col">Tổng tiền</th>
+                    <th scope="col">Tổng sản phẩm</th>
+                    <th scope="col">Nhà cung cấp</th>
+                    <th scope="col" data-orderable="false">Ghi chú</th>
+                    <th scope="col">Trạng thái</th>
+                    <th scope="col" data-orderable="false">Tùy chọn</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in orderLst: %}
+                <tr>
+                    <th scope="row">{{loop.index}}</th>
+                    <td>{{item.id}}</td>
+                    <td style="text-align: center;">{{item.date}}</td>
+                    <td style="text-align: right;">{{item.price}}</td>
+                    <td style="text-align: right;">{{item.amount}}</td>
+                    <td style="text-align: center;">{{item.supplier.name}}</td>
+                    <td>{{item.note}}</td>
+                    {% if item.status==0: %}
+                    <td >
+                        <div style="text-align: center; background-color: rgba(97, 199, 131, 0.678); padding: 10px;">
+                            Đang tạo
+                        </div>
+                    </td>
+                    <td style="text-align: center;">
+                        <a href="/admin/supplier/order/{{item.id}}" style="width: 60px;"
+                            class="btn btn-outline-info">Sửa</a>
+                        <button style="width: 60px;" class="btn btn-outline-danger"
+                            onclick="showModal('Xóa phiếu nhập hàng','Bạn có chắc chắn muốn xóa phiếu này không?','/admin/supplier/order/delete/{{item.id}}')">
+                            Xóa
+                        </button>
+                    </td>
+                    {% endif %}
+                    {% if item.status==1: %}
+                    <td >
+                        <div style="text-align: center; background-color: rgba(73, 222, 239, 0.678); padding: 10px;">
+                            Đang nhận
+                        </div>
+                    </td>
+                    <td style="text-align: center;">
+                        <a href="/admin/supplier/order/{{item.id}}" style="width: 60px;"
+                        class="btn btn-outline-info">Xem</a>
+                    </td>
+                    {% endif %}
+                    {% if item.status==2: %}
+                    <td >
+                        <div style="text-align: center; background-color: rgba(220, 81, 255, 0.678); padding: 10px;">
+                            Đã nhận 
+                        </div>
+                    </td>
+                    <td style="text-align: center;">
+                        <a href="/admin/supplier/order/{{item.id}}" style="width: 60px;"
+                        class="btn btn-outline-info">Xem</a>
+                    </td>
+                    {% endif %}
+                    
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    $('#order-list').DataTable({
+        // searching: false,
+        // info: false,
+        pageLength: 7,
+        lengthChange: false,
+        pagingType: 'full_numbers',
+        language: {
+            "zeroRecords": "Không có dữ liệu",
+            "lengthMenu": "Display _MENU_ records per page",
+            "info": "Hiển thị trang thứ _PAGE_ trong tổng số _PAGES_ trang",
+            "infoEmpty": "Trống",
+            "infoFiltered": "",
+            "search": "Tìm kiếm dữ liệu trong bảng dưới",
+            paginate: {
+                first: '<<',
+                last: '>>',
+                next: '>',
+                previous: '<'
+            }
+        },
+    });
+    const selectSupplier = document.getElementById('add-supplier-order');
+    function addOrder() {
+        const supplierId = selectSupplier.value;
+        if (supplierId != 0) {
+            window.location = '/admin/supplier/order/add?supplier=' + supplierId;
+        }
+    }
+</script>
+{% endblock %}
